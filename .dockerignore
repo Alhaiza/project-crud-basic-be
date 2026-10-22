@@ -1,0 +1,17 @@
+.git
+.github
+.env
+.env.backup
+.phpunit.result.cache
+node_modules
+npm-debug.log
+yarn-error.log
+vendor
+tests
+storage/*.key
+.editorconfig
+phpunit.xml
+bootstrap/cache/*.php
+storage/logs/*.log
+README.md
+project-context.md

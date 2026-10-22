@@ -8,7 +8,7 @@ return [
     'allowed_methods' => ['*'],
 
     // 3. Domain frontend Nuxt yang diizinkan mengakses API (mencegah error CORS)
-    'allowed_origins' => ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    'allowed_origins' => array_values(array_filter(explode(',', (string) ($_ENV['CORS_ALLOWED_ORIGINS'] ?? getenv('CORS_ALLOWED_ORIGINS') ?: 'http://localhost:3000,http://127.0.0.1:3000,http://localhost,http://127.0.0.1')))),
 
     // 4. Pola regex untuk domain asal jika dinamis (kosong untuk kebutuhan lokal)
     'allowed_origins_patterns' => [],
