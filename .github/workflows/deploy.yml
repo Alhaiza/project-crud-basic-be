@@ -1,0 +1,35 @@
+name: Auto Deploy Backend (Laravel 12)
+
+on:
+  push:
+    branches:
+      - main
+
+# Batasi hanya 1 proses deploy yang berjalan bersamaan (mencegah tabrakan build)
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy to VPS Server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Eksekusi Deployment via SSH ke VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            echo "==> [CI/CD] Menarik kode terbaru Backend Laravel 12..."
+            cd /var/www/app-crud/crud-be
+            git pull origin main
+
+            echo "==> [CI/CD] Membangun ulang kontainer backend & migrasi via crud-docker..."
+            cd ../crud-docker
+            docker compose up -d --build --no-deps backend
+
+            echo "==> [CI/CD] Backend REST API berhasil di-deploy dan live!"
